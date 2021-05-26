@@ -1,5 +1,5 @@
 
-name: Docker tests
+name: Docker build
 
 on:
   push:
@@ -8,19 +8,22 @@ on:
     branches: [ master ]
 
 jobs:
-  laravel-tests:
+  build-push:
 
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-      - name: Push app to GitHub Packages
-        uses: docker/build-push-action@v1
+      -
+        name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
         with:
-          path: .
-          dockerfile: ./Dockerfile
-          username: ${{ github.actor }}
-          password: ${{ secrets.REGISTRY_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push app to GitHub Packages
+        uses: docker/build-push-action@v2
+        with:
           registry: docker.pkg.github.com
           repository: HOVOH/web3-authentication-service/service
           tag_with_ref: true
