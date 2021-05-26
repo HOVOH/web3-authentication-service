@@ -1,0 +1,27 @@
+
+name: Docker tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  laravel-tests:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Push app to GitHub Packages
+        uses: docker/build-push-action@v1
+        with:
+          path: .
+          dockerfile: ./Dockerfile
+          username: ${{ github.actor }}
+          password: ${{ secrets.REGISTRY_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: HOVOH/web3-authentication-service/service
+          tag_with_ref: true
+

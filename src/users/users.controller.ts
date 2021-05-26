@@ -1,6 +1,6 @@
 import { UsersService } from './users.service';
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import {  AccessTokenGuard } from '@hovoh/nestjs-authentication-lib';
+import { AccessTokenGuard } from '@hovoh/nestjs-authentication-lib';
 
 @Controller('v1/users')
 @UseGuards(AccessTokenGuard)
