@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  grpclient:
+    image: gusaul/grpcox
+    ports:
+      - "6969:6969"
+    volumes:
+    - "./logs/gropcox:/log"
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+  db:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: ${DB_NAME}
