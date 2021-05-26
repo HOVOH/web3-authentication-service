@@ -24,7 +24,7 @@ jobs:
       - name: Push app to GitHub Packages
         uses: docker/build-push-action@v2
         with:
-          registry: docker.pkg.github.com
+          registry: ghcr.io
           repository: HOVOH/web3-authentication-service/service
           tag_with_ref: true
 
