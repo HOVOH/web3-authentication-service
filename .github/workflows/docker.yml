@@ -24,6 +24,6 @@ jobs:
       - name: Push app to GitHub Packages
         uses: docker/build-push-action@v2
         with:
-          tags: "docker.pkg.github.com/hovoh/web3-authentication-service/service:latest"
+          tags: "docker.pkg.github.com/hovoh/web3-authentication-service/auth-service:latest"
           push: true
 
