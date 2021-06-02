@@ -21,8 +21,8 @@ import { serialize } from "class-transformer";
 
 const REFRESH_COOKIE_NAME = 'hovoh_refresh';
 
-@Controller('v1/authentication')
-export class AuthResolver {
+@Controller('api/v1/authentication')
+export class AuthController {
   constructor(private authService: AuthService,
               private envService: EnvironmentService<IEnv>,
               private verificationService: VerificationService) {}

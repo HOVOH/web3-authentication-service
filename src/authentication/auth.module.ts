@@ -8,7 +8,7 @@ import {
 } from '@hovoh/nestjs-environment-module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Session } from './session.entity';
-import { AuthResolver } from './auth.resolver';
+import { AuthController } from './auth.controller';
 import { IEnv } from '../app.module';
 import { AccessTokenGuard } from '@hovoh/nestjs-authentication-lib';
 import { VerificationModule } from "../verification/verification.module";
@@ -30,7 +30,7 @@ import { VerificationModule } from "../verification/verification.module";
     VerificationModule,
   ],
   providers: [AuthService, AccessTokenGuard],
-  controllers: [AuthResolver],
+  controllers: [AuthController],
   exports: [AccessTokenGuard, JwtModule],
 })
 export class AuthModule {}

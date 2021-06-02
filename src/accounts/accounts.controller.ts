@@ -1,9 +1,9 @@
-import { Body, Controller, Get, HttpStatus, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
 import { ReqSession, Session, AccessTokenGuard } from "@hovoh/nestjs-authentication-lib";
 import { UsersService } from "../users/users.service";
 import { UpdateAccountRequest } from "./update-account.request";
 
-@Controller("v1/account")
+@Controller("api/v1/account")
 @UseGuards(AccessTokenGuard)
 export class AccountsController {
 
