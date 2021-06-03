@@ -7,4 +7,9 @@ export class UpdateAccountRequest{
   @IsOptional()
   username: string
 
+  @IsString()
+  @MinLength(4)
+  @MaxLength(100)
+  @IsOptional()
+  password: string
 }

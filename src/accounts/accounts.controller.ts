@@ -17,7 +17,14 @@ export class AccountsController {
 
   @Post()
   async update(@ReqSession() session: Session, @Body() body: UpdateAccountRequest){
-    await this.usersService.updateFromUuid(session.userUuid, body)
+    const {password, ...rest} = body
+    if (password){
+      const user = await this.usersService.findByUuid(session.userUuid);
+      user.password = password;
+      await this.usersService.save(Object.assign(user, rest));
+    } else {
+      await this.usersService.updateFromUuid(session.userUuid, rest)
+    }
   }
 
 }

@@ -1,9 +1,9 @@
 import { AuthService } from './auth.service';
-import { Body, Controller, Get, HttpStatus, Post, Query, Req, Res } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Post, Query, Req, Res, UseGuards } from "@nestjs/common";
 import { Response, Request } from 'express';
 import { USERNAME_TAKEN } from '../users/error.codes';
 import { Session } from './session.entity';
-import { errors, ACCESS_COOKIE_NAME } from '@hovoh/nestjs-authentication-lib';
+import { errors, ACCESS_COOKIE_NAME, ReqSession, AccessTokenGuard } from "@hovoh/nestjs-authentication-lib";
 import {
   CatchApplicationError,
   ApplicationError,
@@ -127,5 +127,27 @@ export class AuthController {
     );
     this.setAccessTokenInCookie(res, session);
     res.send(serialize(session.accessToken()));
+  }
+
+  @Post('logout')
+  @UseGuards(AccessTokenGuard)
+  async logout(@ReqSession() session: Session, @Res() res: Response){
+    res.cookie(
+      REFRESH_COOKIE_NAME,
+      "",
+      {
+        httpOnly: true,
+        expires: new Date(),
+      },
+    );
+    res.cookie(
+      ACCESS_COOKIE_NAME,
+      "",
+      {
+        httpOnly: true,
+        expires: new Date(),
+      },
+    );
+    res.status(200).send();
   }
 }
