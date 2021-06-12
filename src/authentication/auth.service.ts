@@ -108,4 +108,9 @@ export class AuthService {
     session.refresh();
     return await this.sessionsRepository.save(session);
   }
+
+  async isRegistered(address: EthereumAddress): Promise<boolean>{
+    return this.usersService.walletIsRegistered(address)
+  }
+
 }

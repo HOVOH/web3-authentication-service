@@ -66,6 +66,9 @@ export class AuthController {
 
   @Get('web3-login-code')
   async getWeb3LoginCode(@Query() req: Web3LoginCodeRequest){
+    if (!this.envService.env.REGISTRATIONS_OPEN && !(await this.authService.isRegistered(req.ethereumAddress))){
+      throw new ApplicationError(REGISTRATIONS_CLOSE)
+    }
     return this.verificationService.generateEthVerificationCode(req.ethereumAddress);
   }
 
