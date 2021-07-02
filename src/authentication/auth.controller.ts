@@ -20,17 +20,25 @@ import { User } from "../users/user.entity";
 import { serialize } from "class-transformer";
 
 const REFRESH_COOKIE_NAME = 'hovoh_refresh';
+const SIGNATURE_DOES_NOT_MATCH = "signature_does_not_match_address";
 
 @Controller('api/v1/authentication')
+@CatchApplicationError({
+  [errors.BAD_CREDENTIALS]: HttpStatus.UNAUTHORIZED,
+  [REGISTRATIONS_CLOSE]: HttpStatus.FORBIDDEN,
+  [ETHEREUM_ADDRESS_ALREADY_IN_USE]: HttpStatus.NOT_ACCEPTABLE,
+  [SIGNATURE_DOES_NOT_MATCH]: HttpStatus.NOT_ACCEPTABLE,
+  [USERNAME_TAKEN]: HttpStatus.NOT_ACCEPTABLE,
+  [errors.NO_ACCESS_TOKEN]: HttpStatus.UNAUTHORIZED,
+  [errors.NO_REFRESH_TOKEN]: HttpStatus.UNAUTHORIZED,
+  [errors.BAD_REFRESH_TOKEN]: HttpStatus.UNAUTHORIZED
+})
 export class AuthController {
   constructor(private authService: AuthService,
               private envService: EnvironmentService<IEnv>,
               private verificationService: VerificationService) {}
 
   @Post('login')
-  @CatchApplicationError({
-    [errors.BAD_CREDENTIALS]: HttpStatus.UNAUTHORIZED,
-  })
   async login(
     @Body() args: LoginRequest,
     @Res() res: Response,
@@ -45,6 +53,7 @@ export class AuthController {
         {
           httpOnly: true,
           expires: session.refreshableUntil,
+          path: "api/v1/authentication/refresh-token"
         },
       );
       res.send(serialize(session.accessToken()));
@@ -73,15 +82,10 @@ export class AuthController {
   }
 
   @Post('web3-login')
-  @CatchApplicationError({
-    [REGISTRATIONS_CLOSE]: HttpStatus.FORBIDDEN,
-    [ETHEREUM_ADDRESS_ALREADY_IN_USE]: HttpStatus.NOT_ACCEPTABLE,
-    ["signature_does_not_match_address"]: HttpStatus.NOT_ACCEPTABLE
-  })
   async web3Login(@Body() body: Web3LoginRequest, @Res() res: Response,){
     const signatureOk = await this.verificationService.verifySignedCode(body.ethereumAddress, body.signature);
     if (!signatureOk){
-      throw new ApplicationError("signature_does_not_match_address")
+      throw new ApplicationError(SIGNATURE_DOES_NOT_MATCH)
     }
     const user = new User();
     user.ethereumAddress = body.ethereumAddress;
@@ -100,11 +104,6 @@ export class AuthController {
 
 
   @Post('register')
-  @CatchApplicationError({
-    [USERNAME_TAKEN]: HttpStatus.NOT_ACCEPTABLE,
-    [REGISTRATIONS_CLOSE]: HttpStatus.FORBIDDEN,
-    [ETHEREUM_ADDRESS_ALREADY_IN_USE]: HttpStatus.NOT_ACCEPTABLE
-  })
   async register(
     @Body() args: RegisterRequest,
   ) {

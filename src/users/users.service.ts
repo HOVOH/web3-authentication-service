@@ -67,6 +67,6 @@ export class UsersService {
   }
 
   async walletIsRegistered(address: EthereumAddress){
-    return (await this.findByEthAddress(address)) !== null;
+    return !!(await this.findByEthAddress(address));
   }
 }
