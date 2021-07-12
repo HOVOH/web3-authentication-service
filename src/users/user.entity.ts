@@ -24,7 +24,7 @@ export class User {
     nullable: true,
   })
   @Length(3, 20)
-  username: string;
+  username?: string;
 
   @Column({
     name: 'password',
@@ -33,28 +33,28 @@ export class User {
     nullable: true,
   })
   @Exclude()
-  private _password: string;
+  private _password?: string;
 
   @Column({ nullable: true })
   @IsEmail()
   @Length(5, 255)
-  email: string;
+  email?: string;
 
   @Column({ default: false })
-  verified: boolean;
+  verified?: boolean;
 
   @Column({ nullable: true })
-  firstName: string;
+  firstName?: string;
 
   @Column({ nullable: true })
-  lastName: string;
+  lastName?: string;
 
   @Column({ nullable: true })
   @IsDate()
-  dateOfBirth: Date;
+  dateOfBirth?: Date;
 
   @Column({ nullable: true })
-  phone: string;
+  phone?: string;
 
   set password(password) {
     this._password = bcrypt.hashSync(password, 2);
@@ -65,6 +65,9 @@ export class User {
   }
 
   async comparePassword(password) {
-    return this._password && (await bcrypt.compare(password, this.password));
+    if (this.password){
+      return await bcrypt.compare(password, this.password)
+    }
+    return false;
   }
 }

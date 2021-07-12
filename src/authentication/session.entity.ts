@@ -14,6 +14,9 @@ export interface IRefreshToken {
   refreshableUntil: Date;
 }
 
+export const SESSION_LENGTH = 30;
+export const REFRESH_LENGTH = 1440;
+
 @Entity()
 @Exclude()
 export class Session implements IAccessToken, IRefreshToken {
@@ -55,8 +58,8 @@ export class Session implements IAccessToken, IRefreshToken {
 
   start() {
     this.startedAt = new Date();
-    this.validUntil = moment(this.startedAt).add(30, 'm').toDate();
-    this.refreshableUntil = moment(this.startedAt).add(1, 'd').toDate();
+    this.validUntil = moment(this.startedAt).add(SESSION_LENGTH, 'm').toDate();
+    this.refreshableUntil = moment(this.startedAt).add(REFRESH_LENGTH, 'm').toDate();
   }
 
   refresh() {
@@ -66,7 +69,7 @@ export class Session implements IAccessToken, IRefreshToken {
     if (!this.refreshable()) {
       throw new ApplicationError(errors.BAD_REFRESH_TOKEN);
     }
-    this.validUntil = moment(new Date()).add(30, 'm').toDate();
+    this.validUntil = moment(new Date()).add(SESSION_LENGTH, 'm').toDate();
   }
 
   refreshable() {
