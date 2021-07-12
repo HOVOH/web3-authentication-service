@@ -5,6 +5,7 @@ import { User } from './user.entity';
 import { USERNAME_TAKEN } from './error.codes';
 import { ApplicationError } from '@hovoh/nestjs-application-error';
 import { EthereumAddress } from "../utils/EthereumAddress";
+import { ETHEREUM_ADDRESS_ALREADY_IN_USE } from "../authentication/error.codes";
 
 @Injectable()
 export class UsersService {
@@ -22,12 +23,17 @@ export class UsersService {
       .createQueryBuilder()
       .insert()
       .values(user)
-      .onConflict(`("username") DO NOTHING`)
+      //.onConflict(`("username", "ethereumAddress") DO NOTHING`)
       .execute();
     if (insertResult.raw.length == 1) {
       user = Object.assign(user, insertResult.raw[0]);
     } else {
-      throw new ApplicationError(USERNAME_TAKEN);
+      const userAccount = this.findByEthAddress(address);
+      if (userAccount){
+        throw new ApplicationError(ETHEREUM_ADDRESS_ALREADY_IN_USE);
+      } else {
+        throw new ApplicationError(USERNAME_TAKEN);
+      }
     }
     return user;
   }

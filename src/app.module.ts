@@ -7,7 +7,7 @@ import { ValidationPipe } from "@hovoh/nestjs-api-lib";
 import { AccountsModule } from "./accounts/accounts.module";
 
 export interface IEnv {
-  ENVIRONMENT: 'prod' | 'dev' | 'test';
+  NODE_ENV: 'production' | 'dev' | 'test';
   DB_TYPE: 'postgres';
   DB_USER: string;
   DB_PASSWORD: string;
