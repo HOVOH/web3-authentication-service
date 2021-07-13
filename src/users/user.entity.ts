@@ -57,7 +57,11 @@ export class User {
   phone?: string;
 
   set password(password) {
-    this._password = bcrypt.hashSync(password, 2);
+    if (password){
+      this._password = bcrypt.hashSync(password, 2);
+    } else {
+      this._password = null;
+    }
   }
 
   get password() {

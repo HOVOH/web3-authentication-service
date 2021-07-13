@@ -19,16 +19,15 @@ export class UsersService {
     user.username = username;
     user.password = password;
     user.ethereumAddress = address;
-    const insertResult = await this.usersRepository
-      .createQueryBuilder()
-      .insert()
-      .values(user)
-      //.onConflict(`("username", "ethereumAddress") DO NOTHING`)
-      .execute();
-    if (insertResult.raw.length == 1) {
+    try{
+      const insertResult = await this.usersRepository
+        .createQueryBuilder()
+        .insert()
+        .values(user)
+        .execute();
       user = Object.assign(user, insertResult.raw[0]);
-    } else {
-      const userAccount = this.findByEthAddress(address);
+    } catch (sqlError){
+      const userAccount = await this.findByEthAddress(address);
       if (userAccount){
         throw new ApplicationError(ETHEREUM_ADDRESS_ALREADY_IN_USE);
       } else {

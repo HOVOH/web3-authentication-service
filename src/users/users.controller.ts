@@ -7,8 +7,8 @@ import { AccessTokenGuard } from '@hovoh/nestjs-authentication-lib';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @Get()
+/*  @Get()
   async listUsers() {
     return this.usersService.findAll();
-  }
+  }*/
 }
