@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { VerificationCode } from "./VerificationCode";
+import { VerificationCode } from "./verification-code.entity";
 import * as crypto from 'crypto';
 import { InjectRepository } from "@nestjs/typeorm";
 import { Raw, Repository } from "typeorm";

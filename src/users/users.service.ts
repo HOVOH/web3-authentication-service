@@ -64,7 +64,7 @@ export class UsersService {
   }
 
   async updateFromUuid(uuid: string, update: Partial<User>) {
-    return await this.usersRepository.save({uuid ,...update});
+    return await this.usersRepository.update({ uuid }, update);
   }
 
   async save(user: User){

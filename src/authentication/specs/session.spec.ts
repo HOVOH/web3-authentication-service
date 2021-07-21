@@ -1,8 +1,8 @@
 import { REFRESH_LENGTH, Session, SESSION_LENGTH } from "../session.entity";
 import MockDate from 'mockdate';
-import { errors } from "@hovoh/nestjs-authentication-lib";
 import * as moment from "moment";
 import { userFactory } from "../../users/specs/user.factory";
+import { User } from "../../users/user.entity";
 describe("Session", ()=>{
   describe("start", () => {
     it("should set dates", () =>{
@@ -75,7 +75,7 @@ describe("Session", ()=>{
       const session = new Session();
       const user = userFactory.build();
       session.userUuid = user.uuid;
-      session.user = user;
+      session.user = user as User;
       session.refreshSecret = 1337;
       session.start();
       const refreshToken = session.refreshToken() as Session;
@@ -92,7 +92,7 @@ describe("Session", ()=>{
       const session = new Session();
       const user = userFactory.build();
       session.userUuid = user.uuid;
-      session.user = user;
+      session.user = user as User;
       session.refreshSecret = 1337;
       session.start()
       const refreshToken = session.accessToken() as Session;

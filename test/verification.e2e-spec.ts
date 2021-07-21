@@ -6,7 +6,7 @@ import { VerificationService } from "../src/verification/verification.service";
 import { INestApplication } from "@nestjs/common";
 import { DEAD_ADDRESS } from "./test-helper";
 import { Repository } from "typeorm";
-import { VerificationCode } from "../src/verification/VerificationCode";
+import { VerificationCode } from "../src/verification/verification-code.entity";
 import { getRepositoryToken } from "@nestjs/typeorm";
 import moment from "moment";
 
