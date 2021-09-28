@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from "typeorm";
 import { User } from './user.entity';
 import { USERNAME_TAKEN } from './error.codes';
 import { ApplicationError } from '@hovoh/nestjs-application-error';
@@ -74,4 +74,9 @@ export class UsersService {
   async walletIsRegistered(address: EthereumAddress){
     return !!(await this.findByEthAddress(address));
   }
+
+  merge(user0: User, user1: DeepPartial<User>){
+    return this.usersRepository.merge(user0, user1);
+  }
+
 }

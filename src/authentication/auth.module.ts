@@ -12,7 +12,7 @@ import { AuthController } from './auth.controller';
 import { IEnv } from '../app.module';
 import { AccessTokenGuard } from '@hovoh/nestjs-authentication-lib';
 import { VerificationModule } from "../verification/verification.module";
-
+import * as fs from "fs";
 @Global()
 @Module({
   imports: [
@@ -22,9 +22,11 @@ import { VerificationModule } from "../verification/verification.module";
     JwtModule.registerAsync({
       imports: [EnvironmentModule],
       useFactory: ({ env }: EnvironmentService<IEnv>) => ({
-        secret: env.JWT_SECRET,
-        signOptions: { expiresIn: env.JWT_EXPIRES_IN },
+        publicKey: fs.readFileSync(env.JWT_PUBLIC_CERTIFICATE_PATH),
+        privateKey: fs.readFileSync(env.JWT_PRIVATE_KEY_PATH),
+        signOptions: { expiresIn: env.JWT_EXPIRES_IN, algorithm: "ES256"},
       }),
+
       inject: [EnvironmentService],
     }),
     VerificationModule,

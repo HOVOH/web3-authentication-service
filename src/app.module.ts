@@ -14,7 +14,8 @@ export interface IEnv {
   DB_HOST: string;
   DB_PORT: number;
   DB_NAME: string;
-  JWT_SECRET: string;
+  JWT_PUBLIC_CERTIFICATE_PATH: string;
+  JWT_PRIVATE_KEY_PATH: string;
   JWT_EXPIRES_IN: string;
   REGISTRATIONS_OPEN: string;
 }

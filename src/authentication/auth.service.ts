@@ -26,11 +26,7 @@ export class AuthService {
   ) {}
 
   async register(address: EthereumAddress, username: string, password: string): Promise<User> {
-    try {
-      return await this.usersService.registerUser(address, username, password);
-    } catch (ignored){
-      throw new ApplicationError(ETHEREUM_ADDRESS_ALREADY_IN_USE);
-    }
+    return await this.usersService.registerUser(address, username, password);
   }
 
   async validateCredentials(
@@ -48,9 +44,9 @@ export class AuthService {
     if (!user.uuid && user.ethereumAddress){
       const userFound = await this.usersService.findByEthAddress(user.ethereumAddress);
       if (userFound){
-        Object.assign(user, userFound);
+        user = this.usersService.merge(user, userFound);
       } else {
-        Object.assign(user, await this.usersService.save(user));
+        user = await this.usersService.save(user);
       }
     }
     return await this.startSession(user);
