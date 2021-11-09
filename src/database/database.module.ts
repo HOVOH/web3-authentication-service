@@ -18,7 +18,7 @@ import { IEnv } from "../app.module";
         password: env.DB_PASSWORD,
         database: env.NODE_ENV === "test"? env.DB_NAME+"_tests" :env.DB_NAME,
         autoLoadEntities: true,
-        synchronize: env.NODE_ENV !== "production",
+        synchronize: true,
         logging: false,
       }),
       inject: [EnvironmentService],
